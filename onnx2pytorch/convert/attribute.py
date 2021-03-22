@@ -123,7 +123,7 @@ def extract_attributes(node):
             kwargs[attr.name] = extract_attr_values(attr)
         elif attr.name == "auto_pad":
             value = extract_attr_values(attr)
-            if value == "NOTSET":
+            if value == "NOTSET" or value == 'VALID':
                 pass
             else:
                 raise NotImplementedError(

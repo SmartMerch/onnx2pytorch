@@ -1,9 +1,8 @@
 from functools import partial
 
 import torch
-from torch import nn
-from torch.nn import functional as F
 from onnx import numpy_helper
+from torch import nn
 
 from onnx2pytorch.convert.attribute import extract_attributes
 from onnx2pytorch.convert.layer import (
@@ -13,8 +12,8 @@ from onnx2pytorch.convert.layer import (
     convert_instance_norm_layer,
 )
 from onnx2pytorch.operations import *
-from onnx2pytorch.operations.base import OperatorWrapper
 from onnx2pytorch.operations import Resize, Upsample
+from onnx2pytorch.operations.base import OperatorWrapper
 from onnx2pytorch.utils import value_wrapper
 
 
@@ -42,6 +41,8 @@ def convert_operations(onnx_model, batch_dim=0):
 
         if node.op_type == "Conv":
             op = convert_layer(node, "Conv", params)
+        elif node.op_type == "Elu":
+            op = nn.ELU(inplace=True)
         elif node.op_type == "Relu":
             op = nn.ReLU(inplace=True)
         elif node.op_type == "LeakyRelu":

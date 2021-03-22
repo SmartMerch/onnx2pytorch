@@ -1,9 +1,9 @@
 import torch
-from torch import nn
 from onnx import numpy_helper
+from torch import nn
 
-from onnx2pytorch.operations import BatchNormUnsafe, InstanceNormUnsafe
 from onnx2pytorch.convert.attribute import extract_attributes, extract_attr_values
+from onnx2pytorch.operations import BatchNormUnsafe, InstanceNormUnsafe
 
 
 def extract_params(params):
@@ -56,8 +56,10 @@ def convert_layer(node, layer_type, params=None):
                 kwargs["out_channels"],
                 kwargs["in_channels"],
             )
-
         # if padding is a layer, remove from kwargs and prepend later
+        if 'padding' not in kwargs.keys():
+            kwargs['padding'] = (0, 0)
+
         if isinstance(kwargs["padding"], nn.Module):
             pad_layer = kwargs.pop("padding")
 
